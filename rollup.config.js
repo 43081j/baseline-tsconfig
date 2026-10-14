@@ -1,0 +1,52 @@
+import typescript from "@rollup/plugin-typescript";
+import terser from "@rollup/plugin-terser";
+
+export default [
+  {
+    input: "src/index.ts",
+    output: {
+      format: "es",
+      dir: "dist",
+    },
+    plugins: [
+      typescript({
+        tsconfig: "./tsconfig.json",
+        outDir: "dist",
+        target: "es2020",
+      }),
+      terser(),
+    ],
+  },
+  {
+    input: "src/index.ts",
+    output: {
+      format: "cjs",
+      file: "dist/index.cjs",
+      exports: "named",
+    },
+    plugins: [
+      typescript({
+        tsconfig: "./tsconfig.json",
+        declaration: false,
+        target: "es2020",
+      }),
+      terser(),
+    ],
+  },
+  {
+    input: "src/cli.ts",
+    output: {
+      format: "cjs",
+      file: "dist/cli.cjs",
+    },
+    plugins: [
+      typescript({
+        tsconfig: "./tsconfig.json",
+        declaration: false,
+        target: "es2020",
+      }),
+      terser(),
+    ],
+    external: ["node:util", "node:process", "./index.cjs"],
+  },
+];
